@@ -15,13 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from . import views
+from BlockChain import views
 
 urlpatterns = [
-    path(r"^admin/", admin.site.urls),
-    path(r"^mine", views.mine),
-    path(r"^transactions/new/", views.new_transaction),
-    path(r"^chain/", views.full_chain),
+    path("admin/", admin.site.urls),
+    path("mine", views.mine),
+    path("transactions/new/", views.new_transaction),
+    path("chain/", views.full_chain),
     path(r"^register", views.register_nodes),
     path(r"^resolve", views.consensus),
 ]

@@ -91,7 +91,12 @@ def mine(request):
 
 
 def new_transaction(request):
-    values = json.loads(request.body.decode()) # "utf-8"
+    values = {
+        "sender": "one address",
+        "recipient": "the other address",
+        "amount": 5
+    }
+    # values = json.dumps(values)
     required = ["sender", "recipient", "amount"]
     if not all(k in values for k in required):
         return "Missing values"
