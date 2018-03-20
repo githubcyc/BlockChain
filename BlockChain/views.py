@@ -1,66 +1,9 @@
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render,HttpResponse
-from time import time
 from uuid import uuid4
-
 import json
-import hashlib
-
-
-class Blockchain():
-    def __init__(self):
-        self.chain = []
-        self.current_transactions = []
-        self.new_block(previous_hash=1, proof=100)
-        self.nodes = set()
-
-    def new_block(self, proof, previous_hash=None):
-        block = {
-            "index": len(self.chain) + 1,
-            "timestamp": time(),
-            "transactions": self.current_transactions,
-            "proof": proof,
-            "previous_hash": previous_hash or self.hash(self.chain[-1]),
-        }
-        self.current_transactions = []
-        self.chain.append(block)
-        return block
-
-    def new_transaction(self, sender, recipient, amount):
-        # Storage transactions
-        # Creates a new Block and adds it to the chain
-        """
-        :param sender: <str> Address of the Sender
-        :param recipient: <str> Address of the Recipient
-        :param amount: <int> Amount
-        :return: <int> The index of the Block that will hold this transaction
-        """
-        self.current_transactions.append({
-            "sender": sender,
-            "recipient": recipient,
-            "amount": amount,
-        })
-        return self.last_block["index"] + 1
-
-    @staticmethod
-    def hash(block):
-        block_string = json.dumps(block, sort_keys=True).encode()
-        return hashlib.sha256(block_string).hexdigest()
-
-    @property
-    def last_block(self):
-        return self.chain[-1]
-
-    def proof_of_work(self, last_proof):
-        proof = 0
-        while self.valid_proof(last_proof, proof) is False:
-            proof += 1
-            return proof
-
-    @staticmethod
-    def valid_proof(last_proof, proof):
-        guess = str(last_proof*proof).encode()
-        guess_hash = hashlib.sha256(guess).hexdigest()
-        return guess_hash[:5] == "00000"
+from BlockChain.core.Blockchain import Blockchain
+from BlockChain.core.myutils import data_prettified
 
 node_identifier = str(uuid4()).replace("-", "")
 # Instantiate the Blockchain
@@ -87,13 +30,13 @@ def mine(request):
         "previous_hash": block["previous_hash"],
     }
     print(response)
-    return HttpResponse(json.dumps(response))
+    return HttpResponse(data_prettified(response))
 
 
 def new_transaction(request):
     values = {
-        "sender": "one address",
-        "recipient": "the other address",
+        "sender": "0",
+        "recipient": "d5ead01f6f2f4dc6b0ad0ec74778205b",
         "amount": 5
     }
     # values = json.dumps(values)
@@ -103,7 +46,7 @@ def new_transaction(request):
     index = blockchain.new_transaction(values["sender"], values["recipient"], values["amount"])
     print(index)
     response = {"message": "Transaction will be added to Block %s"% index}
-    return HttpResponse(json.dumps(response))
+    return HttpResponse(data_prettified(response))
 
 
 def full_chain(request):
@@ -111,4 +54,45 @@ def full_chain(request):
         "chain": blockchain.chain,
         "length": len(blockchain.chain),
     }
-    return HttpResponse(json.dumps(response))
+    return HttpResponse(data_prettified(response))
+
+def register_nodes(request):
+    # request.POST.get()
+    print(request.body)
+    # values = json.loads(request.body.decode('utf-8'))
+    # python3
+    # request.META.get('CONTENT_TYPE', '').lower() == 'application/json'
+    if  len(request.body) > 0:
+        try:
+            values = json.loads(request.body.decode('utf-8'))
+        except Exception as e:
+            return HttpResponseBadRequest(data_prettified({'error': 'Invalid request: {0}'.format(str(e))}),
+                                          content_type="application/json")
+    nodes = values.get('node')
+    print(nodes)
+    # ['http:127.0.0.1:8000']
+    if nodes is None:
+        return "Error: Please supply a valid list of nodes"
+    for node in nodes:
+        print(node)
+        blockchain.register_node(node)
+    response = {
+        'message': 'New nodes have been added',
+        'total_nodes': list(blockchain.nodes),
+    }
+    print(blockchain.nodes)
+    return HttpResponse(data_prettified(response))
+
+def consensus(request):
+    replaced = blockchain.resolve_conflicts()
+    if replaced:
+        response = {
+            'message': 'Our chain was replaced',
+            'chain': blockchain.chain
+        }
+    else:
+        response = {
+            'message': 'Our chain is authoritative',
+            'chain': blockchain.chain
+        }
+    return HttpResponse(data_prettified(response))

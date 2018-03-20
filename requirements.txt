@@ -1,0 +1,4 @@
+requests==2.18.4
+Pygments==2.2.0
+Django==2.0.3
+fire==0.1.3

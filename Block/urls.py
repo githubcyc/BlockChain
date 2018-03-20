@@ -14,14 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path("blog/", include("blog.urls"))
 """
 from django.contrib import admin
-from django.urls import path
+from django.conf.urls import url
 from BlockChain import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("mine", views.mine),
-    path("transactions/new/", views.new_transaction),
-    path("chain/", views.full_chain),
-    path(r"^register", views.register_nodes),
-    path(r"^resolve", views.consensus),
+    url(r'^admin/', admin.site.urls),
+    url(r'^mine', views.mine),
+    url(r'^transactions/new/', views.new_transaction),
+    url(r'^chain/', views.full_chain),
+    url(r'^register', views.register_nodes),
+    url(r'^resolve', views.consensus),
 ]
