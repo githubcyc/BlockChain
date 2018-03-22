@@ -118,7 +118,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_ROOT = '/home/loveforu123/BlockChain/myvenv/lib/python3.6/site-packages/django/contrib/admin/static/' 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\','/')
+
+# set django's admin static dir
+
+STATICFILES_DIRS = (
+'/home/loveforu123/BlockChain/myvenv/lib/python3.6/site-packages/django/contrib/admin/static/',
+)
+
 STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
