@@ -47,6 +47,13 @@ python manage.py runserver 127.0.0.1:8000
 
 新的区块依赖工作量证明算法（PoW）来构造。PoW的目标是找出一个符合特定条件的数字， 这个数字很难计算出来，但容易验证 。这就是工作量证明的核心思想。
 
+## rest demo
+```
+# in root dir
+django-admin startapp rest_demo
+```
+[Home - Django REST framework](http://www.django-rest-framework.org/)
+
 ## Reference
 * **[Blockchain App](http://mp.weixin.qq.com/s/fwlKewtWWlct6wdaVcbezg)**
 
