@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url, include
-from BlockChain import views
+from BlockApp import views
 
 urlpatterns = [
     url(r'^rest_demo/', include('rest_demo.urls')),

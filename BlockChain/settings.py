@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'pl5d7^ryt5g=(_9zw-q$rf28zf)+x%06$u@%c0t*3=0lw03@0z'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -37,9 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'BlockChain.apps.BlockchainConfig',
+    'BlockApp',
     'rest_framework',
-    'rest_demo.apps.RestDemoConfig'
+    'rest_demo'
 ]
 
 MIDDLEWARE = [
@@ -53,7 +53,7 @@ MIDDLEWARE = [
     # 'store.disable.DisableCSRF'
 ]
 
-ROOT_URLCONF = 'Block.urls'
+ROOT_URLCONF = 'BlockChain.urls'
 
 TEMPLATES = [
     {
@@ -71,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Block.wsgi.application'
+WSGI_APPLICATION = 'BlockChain.wsgi.application'
 
 
 # Database

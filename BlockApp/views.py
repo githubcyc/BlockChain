@@ -2,8 +2,8 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render,HttpResponse
 from uuid import uuid4
 import json
-from BlockChain.core.Blockchain import Blockchain
-from BlockChain.core.myutils import data_prettified
+from BlockApp.core.Blockchain import Blockchain
+from BlockApp.core.myutils import data_prettified
 
 node_identifier = str(uuid4()).replace("-", "")
 # Instantiate the Blockchain
